@@ -125,6 +125,37 @@ root@fw0000358:~/ActAlk# cat ../YML/snapshot.json
 root@fw0000358:~/ActAlk# curl -X POST http://127.0.0.1:8001/api/v1/namespaces/default/pods/1pod/action -H "Content-Type: application/json" -d @../YML/snapshot.json
 ```
 
+Having pods/action subresource allows user/ECS to easily create actions on a
+specific Pod as illustrated in the below reboot example:
+```
+root@fw0000358:~/ActAlk# cat ../YML/reboot.json
+{
+  "apiVersion": "v1",
+  "kind": "CustomAction",
+  "actionName": "Reboot",
+  "rebootParams": {
+    "delayInSeconds": 10
+  }
+}
+
+root@fw0000358:~/ActAlk# curl -X POST http://127.0.0.1:8001/api/v1/namespaces/default/pods/1pod/action -H "Content-Type: application/json" -d @../YML/reboot.json
+```
+
+Similarly, user/ECS can request snapshot of (VM) Pod as follows:
+```
+root@fw0000358:~/ActAlk# cat ../YML/snapshot.json
+{
+  "apiVersion": "v1",
+  "kind": "CustomAction",
+  "actionName": "Snapshot",
+  "snapshotParams": {
+    "snapshotLocation": "/var/tmp/"
+  }
+}
+
+root@fw0000358:~/ActAlk# curl -X POST http://127.0.0.1:8001/api/v1/namespaces/default/pods/1pod/action -H "Content-Type: application/json" -d @../YML/snapshot.json
+```
+
 Having top level actions resource allows user/ECS to directly create and list
 actions as illustrated below:
 NOTE: This is not supported, it is here as historical reference.
